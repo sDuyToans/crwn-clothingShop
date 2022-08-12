@@ -97,7 +97,7 @@ export const createUserDocumentFromAuth = async (
       console.log("error creating the user", err.message);
     }
   }
-  return userDocRef;
+  return userSnapshot;
   //if user data does not exit
 
   //create / set the document with the data from userAuth in my collection
@@ -124,3 +124,16 @@ export const signOutUser = async () => {
 export const onAuthStateChangedListener = (callback) => {
   onAuthStateChanged(auth, callback);
 };
+
+export const getCurrentUser = () =>{
+  return new Promise((resolve, reject) => {
+    const unsubcribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubcribe();
+        resolve(userAuth);
+      },
+      reject
+    )
+  })
+}
